@@ -14,6 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.firebase.client.Firebase;
+
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,11 +48,27 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final Button button = (Button) findViewById(R.id.nfc_go_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.i("MainActivity", "button pressed");            }
-        });
+        Firebase.setAndroidContext(this);
+
+
+        final Button mButton = (Button) findViewById(R.id.nfc_go_button);
+        final EditText mEdit = (EditText)findViewById(R.id.input_quantity);
+
+        if (mButton != null) {
+            mButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.i("MainActivity", "button pressed");
+                    Firebase ordersRef = new Firebase("https://quickbev.firebaseio.com/Orders");
+                    int amount = Integer.valueOf(mEdit.getText().toString());
+                    Order order = new Order(amount, false);
+                    String key = ordersRef.push().getKey();
+                    ordersRef.child(key).setValue(order);
+                    AccountStorage.SetAccount(MainActivity.this, key);
+                    Log.i("MainActivity", key);
+                }
+            });
+        }
+
     }
 
     @Override
