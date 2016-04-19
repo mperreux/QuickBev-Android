@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity
         final Button mButton = (Button) findViewById(R.id.nfc_go_button);
         final EditText mEdit = (EditText)findViewById(R.id.input_quantity);
 
+        final View coordinatorLayoutView = findViewById(R.id.coordinatorViewLayout);
+
         if (mButton != null) {
             mButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity
                     ordersRef.child(key).setValue(order);
                     AccountStorage.SetAccount(MainActivity.this, key);
                     Log.i("MainActivity", key);
+                    Snackbar.make(coordinatorLayoutView, "Order Ready to Submit", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             });
         }

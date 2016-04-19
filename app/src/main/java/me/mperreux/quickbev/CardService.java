@@ -45,12 +45,14 @@ public class CardService extends HostApduService {
     // ISO-DEP command HEADER for selecting an AID.
     // Format: [Class | Instruction | Parameter 1 | Parameter 2]
     private static final String SELECT_APDU_HEADER = "00A40400";
+    private static final String SET_STATUS_APDU_HEADER = "80F00000";
+
     // "OK" status word sent in response to SELECT AID command (0x9000)
     private static final byte[] SELECT_OK_SW = HexStringToByteArray("9000");
     // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
     private static final byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
     private static final byte[] SELECT_APDU = BuildSelectApdu(SAMPLE_LOYALTY_CARD_AID);
-
+    private static final byte[] SET_STATUS_APDU = BuildStatusApdu(SAMPLE_LOYALTY_CARD_AID);
     /**
      * Called if the connection to the NFC card is lost, in order to let the application know the
      * cause for the disconnection (either a lost link, or another AID being selected by the
@@ -91,7 +93,13 @@ public class CardService extends HostApduService {
             byte[] accountBytes = account.getBytes();
             Log.i(TAG, "Sending account number: " + account);
             return ConcatArrays(accountBytes, SELECT_OK_SW);
-        } else {
+        }
+        else if (Arrays.equals(SET_STATUS_APDU, commandApdu)){
+            Log.i(TAG, "Transfer Complete");
+            byte[] completeBytes = "Transfer Complete".getBytes();
+            return ConcatArrays(completeBytes, SELECT_OK_SW);
+        }
+        else {
             return UNKNOWN_CMD_SW;
         }
     }
@@ -108,6 +116,12 @@ public class CardService extends HostApduService {
         // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
         return HexStringToByteArray(SELECT_APDU_HEADER + String.format("%02X",
                 aid.length() / 2) + aid);
+    }
+
+    public static byte[] BuildStatusApdu(String aid) {
+        // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
+        return HexStringToByteArray(SET_STATUS_APDU_HEADER + String.format("%02X",
+                0 / 2) + aid);
     }
 
     /**
