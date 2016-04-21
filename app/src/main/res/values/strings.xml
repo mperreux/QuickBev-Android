@@ -7,4 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="service_name">CardEmulation Sample</string>
     <string name="card_title">Card</string>
+    <string name="dialog_message">Touch phone to NFC Reader.</string>
+    <string name="dialog_title">Ready to send</string>
 </resources>

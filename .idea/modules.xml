@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NFCTest.iml" filepath="$PROJECT_DIR$/NFCTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/QuickBev.iml" filepath="$PROJECT_DIR$/QuickBev.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
