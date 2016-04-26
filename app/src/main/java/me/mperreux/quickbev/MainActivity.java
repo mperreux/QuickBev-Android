@@ -3,6 +3,8 @@ package me.mperreux.quickbev;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -22,12 +24,15 @@ import com.firebase.client.Firebase;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OrderFragment.OnFragmentInteractionListener, AdminFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        setFragment(new OrderFragment());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,30 +54,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Firebase.setAndroidContext(this);
 
 
-        final Button mButton = (Button) findViewById(R.id.nfc_go_button);
-        final EditText mEdit = (EditText)findViewById(R.id.input_quantity);
-
-        final View coordinatorLayoutView = findViewById(R.id.coordinatorViewLayout);
-
-        if (mButton != null) {
-            mButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Log.i("MainActivity", "button pressed");
-                    Firebase ordersRef = new Firebase("https://quickbev.firebaseio.com/Orders");
-                    int amount = Integer.valueOf(mEdit.getText().toString());
-                    Order order = new Order(amount, false);
-                    String key = ordersRef.push().getKey();
-                    ordersRef.child(key).setValue(order);
-                    AccountStorage.SetAccount(MainActivity.this, key);
-                    Log.i("MainActivity", key);
-                    Snackbar.make(coordinatorLayoutView, "Order Ready to Submit", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-        }
 
     }
 
@@ -115,15 +98,31 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_order) {
-            // Handle the camera action
+            setFragment(new OrderFragment());
         } else if (id == R.id.nav_payment) {
 
         } else if (id == R.id.nav_admin) {
-
+            setFragment(new AdminFragment());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainFrame, fragment)
+                .commit();
+    }
+
+    @Override
+    public void onOrderFragmentInteraction(String string){
+
+    }
+    @Override
+    public void onAdminFragmentInteraction(String string){
+
     }
 }

@@ -9,4 +9,7 @@
     <string name="card_title">Card</string>
     <string name="dialog_message">Touch phone to NFC Reader.</string>
     <string name="dialog_title">Ready to send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Admin Fragment</string>
 </resources>
