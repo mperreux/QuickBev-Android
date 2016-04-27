@@ -6,10 +6,77 @@
     tools:context="me.mperreux.quickbev.AdminFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        android:layout_gravity="center" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+        <TextView
+            android:id="@+id/admin_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Admin"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:phoneNumber="false"
+            android:paddingBottom="20dp"/>
+        <TextView
+            android:id="@+id/num_drinks_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of Orders Processed:"
+            android:textStyle="bold"
+            android:layout_gravity="left|top"
+            android:textSize="20sp"
+            android:layout_below="@+id/admin_title"/>
+        <TextView
+            android:id="@+id/num_drink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading..."
+            android:paddingLeft="2dp"
+            android:textSize="20sp"
+            android:layout_below="@+id/admin_title"
+            android:layout_toEndOf="@+id/num_drinks_info"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total ounces dispensed:"
+            android:id="@+id/num_ounces_info"
+            android:textIsSelectable="false"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_below="@+id/num_drinks_info"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:id="@+id/num_ounces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading..."
+            android:paddingLeft="2dp"
+            android:textSize="20sp"
+            android:layout_below="@+id/num_drinks_info"
+            android:layout_toEndOf="@+id/num_ounces_info"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total mL dispensed:"
+            android:textStyle="bold"
+            android:id="@+id/num_ml_info"
+            android:textIsSelectable="false"
+            android:textSize="20sp"
+            android:layout_below="@+id/num_ounces_info"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:id="@+id/num_ml"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading..."
+            android:textSize="20sp"
+            android:paddingLeft="2dp"
+            android:layout_below="@+id/num_ounces_info"
+            android:layout_toEndOf="@+id/num_ml_info"/>
+    </RelativeLayout>
 
 </FrameLayout>

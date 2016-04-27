@@ -89,10 +89,14 @@ public class CardService extends HostApduService {
         // If the APDU matches the SELECT AID command for this service,
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
-            String account = AccountStorage.GetAccount(this);
-            byte[] accountBytes = account.getBytes();
-            Log.i(TAG, "Sending account number: " + account);
-            return ConcatArrays(accountBytes, SELECT_OK_SW);
+//            String account = AccountStorage.GetAccount(this);
+//            byte[] accountBytes = account.getBytes();
+//            Log.i(TAG, "Sending account number: " + account);
+//            return ConcatArrays(accountBytes, SELECT_OK_SW);
+            String amount = AccountStorage.GetAmount(this);
+            byte[] amountBytes = amount.getBytes();
+            Log.i(TAG, "Sending amount: " + amount);
+            return ConcatArrays(amountBytes, SELECT_OK_SW);
         }
         else if (Arrays.equals(SET_STATUS_APDU, commandApdu)){
             Log.i(TAG, "Transfer Complete");

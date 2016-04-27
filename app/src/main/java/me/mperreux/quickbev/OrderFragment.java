@@ -93,6 +93,9 @@ public class OrderFragment extends Fragment {
                         String key = ordersRef.push().getKey();
                         ordersRef.child(key).setValue(order);
                         AccountStorage.SetAccount(getActivity(), key);
+
+                        int millilitersInt = (int) Math.round(order.getMilliliters());
+                        AccountStorage.SetAmount(getActivity(), Integer.toString(millilitersInt));
                         Log.i("MainActivity", key);
 
                         closeKeyboard(mEdit);

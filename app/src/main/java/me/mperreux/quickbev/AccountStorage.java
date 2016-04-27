@@ -36,6 +36,11 @@ public class AccountStorage {
     private static String sAccount = null;
     private static final Object sAccountLock = new Object();
 
+    private static final String PREF_AMOUNT_NUMBER = "amount_number";
+    private static final String DEFAULT_AMOUNT_NUMBER = "0";
+    private static String sAmount = null;
+    private static final Object sAmountLock = new Object();
+
     public static void SetAccount(Context c, String s) {
         synchronized(sAccountLock) {
             Log.i(TAG, "Setting account number: " + s);
@@ -53,6 +58,24 @@ public class AccountStorage {
                 sAccount = account;
             }
             return sAccount;
+        }
+    }
+    public static void SetAmount(Context c, String s) {
+        synchronized(sAmountLock) {
+            Log.i(TAG, "Setting account number: " + s);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+            prefs.edit().putString(PREF_AMOUNT_NUMBER, s).commit();
+            sAmount = s;
+        }
+    }
+    public static String GetAmount(Context c) {
+        synchronized (sAmountLock) {
+            if (sAmount == null) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+                String amount = prefs.getString(PREF_AMOUNT_NUMBER, DEFAULT_AMOUNT_NUMBER);
+                sAmount = amount;
+            }
+            return sAmount;
         }
     }
 }

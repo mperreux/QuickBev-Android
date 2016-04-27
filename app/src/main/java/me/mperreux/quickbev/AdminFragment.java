@@ -7,6 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.firebase.client.snapshot.IndexedNode;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -64,7 +74,48 @@ public class AdminFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin, container, false);
+
+        Firebase.setAndroidContext(getActivity());
+
+        final TextView numDrinks = (TextView) view.findViewById(R.id.num_drink);
+        final TextView numOunces = (TextView) view.findViewById(R.id.num_ounces);
+        final TextView numMl = (TextView) view.findViewById(R.id.num_ml);
+
+        Firebase ordersRef = new Firebase("https://quickbev.firebaseio.com/Orders");
+
+        ordersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long numOrders = dataSnapshot.getChildrenCount();
+                numDrinks.setText(Long.toString(numOrders));
+
+                long totalOunces = 0;
+                double totalMl = 0;
+                for (DataSnapshot order : dataSnapshot.getChildren()){
+                    long currOunces = 0;
+                    double currMl = 0;
+                    try{
+                        currOunces = (long) order.child("ounces").getValue();
+                        currMl = (Double) order.child("milliliters").getValue();
+                    }catch(ClassCastException e){
+
+                    }
+                    totalOunces += currOunces;
+                    totalMl += currMl;
+                }
+
+                numOunces.setText(Long.toString(totalOunces));
+                numMl.setText(Double.toString(totalMl));
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
