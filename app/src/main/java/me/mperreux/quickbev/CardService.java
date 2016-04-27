@@ -96,6 +96,7 @@ public class CardService extends HostApduService {
         }
         else if (Arrays.equals(SET_STATUS_APDU, commandApdu)){
             Log.i(TAG, "Transfer Complete");
+            MainActivity.instance.showNfcCompleteSnackbar();
             byte[] completeBytes = "Transfer Complete".getBytes();
             return ConcatArrays(completeBytes, SELECT_OK_SW);
         }

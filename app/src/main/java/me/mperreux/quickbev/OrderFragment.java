@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -85,15 +86,23 @@ public class OrderFragment extends Fragment {
             mButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Log.i("MainActivity", "button pressed");
-                    Firebase ordersRef = new Firebase("https://quickbev.firebaseio.com/Orders");
-                    int amount = Integer.valueOf(mEdit.getText().toString());
-                    Order order = new Order(amount, false);
-                    String key = ordersRef.push().getKey();
-                    ordersRef.child(key).setValue(order);
-                    AccountStorage.SetAccount(getActivity(), key);
-                    Log.i("MainActivity", key);
-                    Snackbar.make(coordinatorLayoutView, "Order Ready to Submit", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    try{
+                        int amount = Integer.valueOf(mEdit.getText().toString());
+                        Firebase ordersRef = new Firebase("https://quickbev.firebaseio.com/Orders");
+                        Order order = new Order(amount, false);
+                        String key = ordersRef.push().getKey();
+                        ordersRef.child(key).setValue(order);
+                        AccountStorage.SetAccount(getActivity(), key);
+                        Log.i("MainActivity", key);
+
+                        closeKeyboard(mEdit);
+                        Snackbar.make(coordinatorLayoutView, "Order Ready to Submit", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }catch(NumberFormatException e){
+                        closeKeyboard(mEdit);
+                        Snackbar.make(coordinatorLayoutView, "Enter a number", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
                 }
             });
         }
@@ -122,6 +131,11 @@ public class OrderFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void closeKeyboard(EditText editText){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
     /**
